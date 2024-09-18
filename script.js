@@ -316,7 +316,7 @@ var Player = SheetSprite.extend({
     } else this.xVel = 0;
 
     if (wasKeyPressed(SHOOT_KEY)) {
-      if (this.bulletDelayAccumulator > 0.5) {
+      if (this.bulletDelayAccumulator > 0) {
         this.shoot();
         this.bulletDelayAccumulator = 0;
       }
@@ -743,36 +743,43 @@ function resolveCollisions() {
   resolveBulletPlayerCollisions();
 }
 
-// Função para obter a pontuação mais alta do localStorage
+// FunÃ§Ã£o para obter a pontuaÃ§Ã£o mais alta do localStorage
 
 function getHighScore() {
   
-return parseInt(localStorage.getItem('highScore')) || 0;
+return parseInt(localStorage.getItem('highScore_space')) || 0;
 }
 
 
 
-// Função para salvar a pontuação mais alta no localStorage
+// FunÃ§Ã£o para salvar a pontuaÃ§Ã£o mais alta no localStorage
 
 
 function setHighScore(score) {
   
-localStorage.setItem('highScore', score);
+localStorage.setItem('highScore_space', score);
 }
 
 
 
-// Adicione isso na inicialização do jogo
+// Adicione isso na inicializaÃ§Ã£o do jogo
 
 
 var highScore = getHighScore();
 
+// FunÃ§Ã£o para atualizar o jogo
 function updateGame(dt) {
   player.handleInput();
   prevKeyStates = keyStates.slice();
   player.update(dt);
   updateAliens(dt);
   resolveCollisions();
+
+  // Verifica se a pontuaÃ§Ã£o atual do jogador Ã© maior que o highScore
+  if (player.score > highScore) {
+    highScore = player.score;
+    setHighScore(highScore);  // Atualiza o localStorage com o novo highScore
+  }
 }
 
 function drawIntoCanvas(width, height, drawFunc) {
@@ -825,7 +832,7 @@ function drawBottomHud() {
     TEXT_BLINK_FREQ
   );
 
-  // Exibe a pontuação mais alta
+  // Exibe a pontuaÃ§Ã£o mais alta
   fillText
   ("HIGH SCORE: " + highScore, 10, 20, "white", 20);
 }
@@ -861,7 +868,7 @@ function drawStartScreen() {
     36
   );
 
-  // Exibe a pontuação mais alta na tela inicial
+  // Exibe a pontuaÃ§Ã£o mais alta na tela inicial
   
   fillText("HIGH SCORE: " + highScore, 10, 20, "white", 20);
 }
